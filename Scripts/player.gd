@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 var speed=125
-var health = 100
+var health = 30
 
 @onready var anim= $AnimationPlayer
 
@@ -21,7 +21,6 @@ func _physics_process(_delta):
 	else:
 		anim.play("Idle")
 	
-
 	var mouse_pos = get_global_mouse_position()
 	
 	if mouse_pos.x <global_position.x:
@@ -32,7 +31,7 @@ func _physics_process(_delta):
 	var overlapping_enemies = $HurtZone.get_overlapping_bodies()
 	for enemy in overlapping_enemies:
 		if enemy.is_in_group("Enemies"):
-			take_damage(1)
+			take_damage(3)
 			break
 			
 func take_damage(amount):
