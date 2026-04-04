@@ -1,0 +1,59 @@
+name: "Build and Release APK (Godot 4.6)"
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  export-android:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      # 1. Configurar Java (Requerido para compilar Android)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 2. Configurar el SDK de Android
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 3. Exportar usando Firebelley (la opción más estable)
+      - name: Godot Android Export
+        uses: firebelley/godot-export@v5.2.1
+        with:
+          # URLs para Godot 4.6 Stable
+          godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.6-stable/Godot_v4.6-stable_export_templates.tpz
+          relative_project_path: "./" 
+          archive_output: false
+          export_preset_name: "Android" 
+        env:
+          # Le indicamos a Godot dónde están las herramientas de Android
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+          # Variables para la firma (Keystore)
+          # Reemplaza 'tu_archivo.jks' por el nombre real de tu archivo en el repo
+          ANDROID_KEYSTORE_PATH: "tu_archivo.jks" 
+          ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+
+      # 4. Crear el Release y subir el APK
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v0.1.${{ github.run_number }}
+          name: "Build 4.6 - Versión ${{ github.run_number }}"
+          body: "APK generado automáticamente para el Shooter de murciélagos."
+          files: /home/runner/.local/share/godot/builds/*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
