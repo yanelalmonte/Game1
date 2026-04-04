@@ -32,15 +32,14 @@ jobs:
           relative_project_path: "./" 
           archive_output: false
           export_preset_name: "Android" 
-          # Forzamos una ruta de salida conocida
           build_directory: "build"
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          # Al estar en el root, Godot lo encontrará directamente como release.jks
           ANDROID_KEYSTORE_PATH: "release.jks" 
           ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
-      # PASO DE VERIFICACIÓN: Para ver en los logs si el APK se creó
       - name: Check Build Folder
         run: ls -R build/
 
@@ -49,7 +48,8 @@ jobs:
         with:
           tag_name: v0.1.${{ github.run_number }}
           name: "Game1 Apk - Build ${{ github.run_number }}"
-          # Buscamos cualquier archivo .apk dentro de la carpeta build
-          files: build/*/.apk
+          # Corregido para que busque en todas las subcarpetas de build
+          files: build/**/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
