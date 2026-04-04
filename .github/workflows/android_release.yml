@@ -15,17 +15,30 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
+      # PASO CLAVE 1: Configurar Java (Requerido para el SDK de Android)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # PASO CLAVE 2: Configurar el SDK de Android automáticamente
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Godot Android Export
         uses: firebelley/godot-export@v5.2.1
         with:
-          # URLs configuradas para la versión 4.6 Stable
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.6-stable/Godot_v4.6-stable_export_templates.tpz
           relative_project_path: "./" 
-          archive_output: false # Desactivamos el zip para obtener el APK directo
+          archive_output: false
           export_preset_name: "Android" 
         env:
-          # Asegúrate de que el nombre del archivo JKS coincida con el que subiste al repo
+          # Estas variables ayudan a Godot a encontrar el SDK instalado arriba
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+          # Tus credenciales del Keystore
           ANDROID_KEYSTORE_PATH: "tu_archivo.jks" 
           ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -35,7 +48,6 @@ jobs:
         with:
           tag_name: v0.1.${{ github.run_number }}
           name: "Build 4.6 - Versión ${{ github.run_number }}"
-          body: "APK generado automáticamente para el Shooter de murciélagos."
           files: /home/runner/.local/share/godot/builds/*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
