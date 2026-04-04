@@ -13,3 +13,10 @@ func _physics_process(_delta):
 		anim.play("Walk")
 	else:
 		anim.play("Idle")
+
+	var mouse_pos = get_global_mouse_position()
+	
+	if mouse_pos.x <global_position.x:
+		$Sprite2D.flip_h = true
+	else:
+		$Sprite2D.flip_h = false

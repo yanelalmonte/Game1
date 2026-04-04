@@ -12,6 +12,13 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.is_in_group("Enemies"):
+		_explosion()
 		body.queue_free()
 	elif body.is_in_group("Walls"):
-		queue_free()
+		_explosion()
+
+func _explosion():
+	var explosion = preload("res://Scene/bullet_explosion.tscn").instantiate()
+	explosion.global_position = global_position
+	get_tree().current_scene.add_child(explosion)
+	queue_free()

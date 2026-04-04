@@ -13,5 +13,6 @@ func _physics_process(_delta):
 	rotation = direction
 	
 	if Input.is_action_just_pressed("Shoot"):
+		$AnimationPlayer.play("Shoot")
 		shoot()
 	
