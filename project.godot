@@ -10,9 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Taino Culture"
+config/name="Taino_Culture"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
+run/main_scene="res://Scene/Level1.tscn"
 
 [display]
 
