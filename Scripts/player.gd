@@ -5,15 +5,22 @@ var health = 100
 
 @onready var anim= $AnimationPlayer
 
+var is_hurt = false
+
+func _ready():
+	$AnimationPlayer.animation_finished.connect(_on_animation_finished)
+
 func _physics_process(_delta):
 	var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	velocity=direction*speed
 	move_and_slide()
-
-	if direction.length()>0:
-		anim.play("Walk")
+	
+	if(is_hurt==false):
+		if direction.length()>0:
+			anim.play("Walk")
 	else:
 		anim.play("Idle")
+	
 
 	var mouse_pos = get_global_mouse_position()
 	
@@ -29,10 +36,19 @@ func _physics_process(_delta):
 			break
 			
 func take_damage(amount):
+	if is_hurt:
+		return
+	
 	health-= amount
 	print("jugador recibe daño, salud ahora", health)
+	is_hurt = true
+	anim.play("Hurt")
 	if health <=0:
 		die()
+
+func _on_animation_finished(anim_name):
+	if anim_name =="hurt":
+		is_hurt = false
 
 func die():
 	print("jugador muerto, reiniciamos el nivel")

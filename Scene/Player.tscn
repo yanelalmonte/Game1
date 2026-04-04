@@ -8,6 +8,22 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3eeal"]
 size = Vector2(9, 4)
 
+[sub_resource type="Animation" id="Animation_fvocf"]
+resource_name = "Hurt"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [6, 7]
+}
+
 [sub_resource type="Animation" id="Animation_3eeal"]
 resource_name = "Idle"
 length = 0.4
@@ -59,6 +75,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fvocf"]
 _data = {
+&"Hurt": SubResource("Animation_fvocf"),
 &"Idle": SubResource("Animation_3eeal"),
 &"RESET": SubResource("Animation_jvxg0"),
 &"Walk": SubResource("Animation_mud5u")
@@ -66,7 +83,7 @@ _data = {
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mud5u"]
 radius = 7.0
-height = 24.0
+height = 22.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=80503479]
 platform_floor_layers = 4294901760
@@ -97,5 +114,4 @@ texture = ExtResource("3_jvxg0")
 [node name="HurtZone" type="Area2D" parent="." unique_id=631377922]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtZone" unique_id=510643787]
-position = Vector2(0, -1)
 shape = SubResource("CapsuleShape2D_mud5u")
