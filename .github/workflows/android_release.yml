@@ -1,4 +1,4 @@
-name: "Build and Release APK (Godot 4.6)"
+name: "Build and Release APK"
 
 on:
   push:
@@ -15,44 +15,46 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v4
 
-      # 1. Configurar Java (Requerido para compilar Android)
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # 2. Configurar el SDK de Android
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 3. Exportar usando Firebelley
+      - name: Prepare Keystore
+        run: |
+          # Reemplaza 'tu_archivo.jks' por el nombre real de tu archivo en el repo
+          cp tu_archivo.jks release.jks 
+
       - name: Godot Android Export
         uses: firebelley/godot-export@v5.2.1
         with:
-          # URLs para Godot 4.6 Stable
           godot_executable_download_url: https://github.com/godotengine/godot/releases/download/4.6-stable/Godot_v4.6-stable_linux.x86_64.zip
           godot_export_templates_download_url: https://github.com/godotengine/godot/releases/download/4.6-stable/Godot_v4.6-stable_export_templates.tpz
           relative_project_path: "./" 
           archive_output: false
           export_preset_name: "Android" 
+          # Forzamos una ruta de salida conocida
+          build_directory: "build"
         env:
-          # Le indicamos a Godot dónde están las herramientas de Android
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
-          # Variables para la firma (Keystore)
-          ANDROID_KEYSTORE_PATH: "AndroidKey.jks" 
+          ANDROID_KEYSTORE_PATH: "release.jks" 
           ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
-      # 4. Crear el Release y subir el APK
+      # PASO DE VERIFICACIÓN: Para ver en los logs si el APK se creó
+      - name: Check Build Folder
+        run: ls -R build/
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v0.1.${{ github.run_number }}
-          name: "Build 4.6 - Versión ${{ github.run_number }}"
-          body: "APK generado automáticamente para el Shooter de murciélagos."
-          files: /home/runner/.local/share/godot/builds/*.apk
+          name: "Game1 Apk - Build ${{ github.run_number }}"
+          # Buscamos cualquier archivo .apk dentro de la carpeta build
+          files: build/*/.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
