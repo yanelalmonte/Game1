@@ -66,7 +66,7 @@ _data = {
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mud5u"]
 radius = 7.0
-height = 20.0
+height = 24.0
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=80503479]
 platform_floor_layers = 4294901760
