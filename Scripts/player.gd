@@ -46,7 +46,7 @@ func take_damage(amount):
 		die()
 
 func _on_animation_finished(anim_name):
-	if anim_name =="hurt":
+	if anim_name =="Hurt":
 		is_hurt = false
 
 func die():
