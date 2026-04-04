@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 var speed=125
+var health = 100
 
 @onready var anim= $AnimationPlayer
 
@@ -20,3 +21,19 @@ func _physics_process(_delta):
 		$Sprite2D.flip_h = true
 	else:
 		$Sprite2D.flip_h = false
+	
+	var overlapping_enemies = $HurtZone.get_overlapping_bodies()
+	for enemy in overlapping_enemies:
+		if enemy.is_in_group("Enemies"):
+			take_damage(1)
+			break
+			
+func take_damage(amount):
+	health-= amount
+	print("jugador recibe daño, salud ahora", health)
+	if health <=0:
+		die()
+
+func die():
+	print("jugador muerto, reiniciamos el nivel")
+	get_tree().reload_current_scene()
