@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 var speed=125
-var health = 30
+var health = 100
 
 @onready var anim= $AnimationPlayer
 
@@ -11,6 +11,9 @@ func _ready():
 	$AnimationPlayer.animation_finished.connect(_on_animation_finished)
 
 func _physics_process(_delta):
+	
+	update_health_bar()
+	
 	var direction = Input.get_vector("ui_left","ui_right","ui_up","ui_down")
 	velocity=direction*speed
 	move_and_slide()
@@ -52,3 +55,16 @@ func _on_animation_finished(anim_name):
 func die():
 	print("jugador muerto, reiniciamos el nivel")
 	get_tree().reload_current_scene()
+	
+func update_health_bar():
+	$ProgressBar.value = health
+	
+	var fill_style = $ProgressBar.get("theme_override_styles/fill") as StyleBoxFlat
+	
+	if health < 20:
+		fill_style.bg_color = Color.DARK_RED
+	elif health < 50:
+		fill_style.bg_color = Color.ORANGE
+	else:
+		fill_style.bg_color = Color.ALICE_BLUE
+		

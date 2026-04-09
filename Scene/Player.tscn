@@ -81,6 +81,13 @@ _data = {
 &"Walk": SubResource("Animation_mud5u")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mud5u"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mud5u"]
 radius = 7.0
 height = 20.0
@@ -108,6 +115,15 @@ libraries/ = SubResource("AnimationLibrary_fvocf")
 [node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1844426785]
 position = Vector2(0, 9)
 texture = ExtResource("3_jvxg0")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=2104601130]
+offset_left = -7.0
+offset_top = -17.0
+offset_right = 6.0
+offset_bottom = -13.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_mud5u")
+value = 100.0
+show_percentage = false
 
 [node name="Gun" parent="." unique_id=35484608 instance=ExtResource("4_mud5u")]
 
