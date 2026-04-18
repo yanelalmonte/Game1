@@ -15,7 +15,7 @@ func _on_body_entered(body):
 		_explosion()
 
 func _explosion():
-	var explosion = preload("res://Scene/bullet_explosion.tscn").instantiate()
+	var explosion = preload("res://Scene/EnemyExplosion.tscn").instantiate()
 	explosion.global_position = global_position
 	get_tree().current_scene.add_child(explosion)
 	queue_free()

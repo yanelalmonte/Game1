@@ -4,6 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://bfobykcs587qx" path="res://Assets/tiles/floor_tiles.png" id="2_he02s"]
 [ext_resource type="Texture2D" uid="uid://b6xs1qacmxfg" path="res://Assets/tiles/wall_tiles.png" id="3_he02s"]
 [ext_resource type="PackedScene" uid="uid://d3vj23avqiu8s" path="res://Scene/BatEnemy.tscn" id="4_10jwb"]
+[ext_resource type="PackedScene" uid="uid://dejyoc8k15g2b" path="res://Scene/SkeletonEnemy.tscn" id="5_gqi4c"]
+[ext_resource type="Script" uid="uid://b3attiq55igg5" path="res://Scripts/spawner.gd" id="6_ofx4i"]
+[ext_resource type="Script" uid="uid://b1jxqxfbd5173" path="res://Scripts/bat_enemy.gd" id="7_lfbnc"]
+[ext_resource type="Texture2D" uid="uid://duwgjd2dmcii" path="res://Assets/enemies/e1.png" id="8_d8c13"]
+[ext_resource type="Texture2D" uid="uid://bg7iuk0v8mshs" path="res://Assets/shadows/ss3.png" id="9_8m71o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_040fq"]
 texture = ExtResource("2_he02s")
@@ -70,6 +75,79 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_040fq")
 sources/1 = SubResource("TileSetAtlasSource_o5v15")
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_73mwc"]
+radius = 8.0
+
+[sub_resource type="Animation" id="Animation_hfpqp"]
+resource_name = "Hurt"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.099999994),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [2, 3]
+}
+
+[sub_resource type="Animation" id="Animation_rusvf"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_6ckyg"]
+resource_name = "Walk"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hfpqp"]
+_data = {
+&"Hurt": SubResource("Animation_hfpqp"),
+&"RESET": SubResource("Animation_rusvf"),
+&"Walk": SubResource("Animation_6ckyg")
+}
+
+[sub_resource type="PackedScene" id="PackedScene_cu1y2"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array(), PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("CharacterBody2D", "CharacterBody2D", "Enemies", "platform_floor_layers", "script", "CollisionShape2D", "CollisionShape2D", "position", "shape", "Sprite2D", "Sprite2D", "texture", "hframes", "vframes", "AnimationPlayer", "AnimationPlayer", "libraries/", "Sprite2D2", "Sprite2D", "position", "texture"),
+"node_count": 5,
+"node_ids": PackedInt32Array(358271320, 1093398998, 1572206806, 1066646074, 1633249843),
+"node_paths": [NodePath("."), NodePath("."), NodePath("."), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 2, 3, 0, 4, 1, 1, 2, 1073741824, 0, 6, 5, -1, 2, 7, 2, 8, 3, 0, 1073741825, 0, 10, 9, -1, 3, 11, 4, 12, 5, 13, 6, 0, 1073741826, 0, 15, 14, -1, 1, 16, 7, 0, 1073741827, 0, 18, 17, -1, 2, 19, 8, 20, 9, 0),
+"variants": [4294901760, ExtResource("7_lfbnc"), Vector2(1, 0), SubResource("CircleShape2D_73mwc"), ExtResource("8_d8c13"), 2, 2, SubResource("AnimationLibrary_hfpqp"), Vector2(0, 12), ExtResource("9_8m71o")],
+"version": 3
+}
+
 [node name="Level1" type="Node2D" unique_id=1280532993]
 y_sort_enabled = true
 
@@ -84,3 +162,14 @@ tile_set = SubResource("TileSet_o5v15")
 
 [node name="CharacterBody2D" parent="." unique_id=358271320 instance=ExtResource("4_10jwb")]
 position = Vector2(188, 140)
+
+[node name="CharacterBody2D2" parent="." unique_id=200329337 instance=ExtResource("5_gqi4c")]
+position = Vector2(189, 228)
+
+[node name="Spawner" type="Area2D" parent="." unique_id=1470724339]
+position = Vector2(184, 220)
+script = ExtResource("6_ofx4i")
+enemy_scenes = Array[PackedScene]([SubResource("PackedScene_cu1y2"), ExtResource("5_gqi4c")])
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Spawner" unique_id=1402183448]
+polygon = PackedVector2Array(-36, -122, -35, 78, 212, 79, 210, 32, 246, 32, 245, -40, 193, -39, 194, -71, 50, -69, 50, -119)
