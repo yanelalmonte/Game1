@@ -147,7 +147,7 @@ _bundled = {
 "version": 3
 }
 
-[node name="Level1" type="Node2D" unique_id=1280532993]
+[node name="Level2" type="Node2D" unique_id=1280532993]
 y_sort_enabled = true
 
 [node name="Player" parent="." unique_id=80503479 instance=ExtResource("1_v4jrf")]

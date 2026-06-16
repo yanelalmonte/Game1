@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://gmg0ry3aqurt"]
+
+[ext_resource type="Script" uid="uid://d1w64qkx423vb" path="res://Scripts/item.gd" id="1_hgyfl"]
+[ext_resource type="Texture2D" uid="uid://bqnwxlghvvy0x" path="res://Assets/weapons/bow.png" id="1_xo6dk"]
+
+[sub_resource type="Gradient" id="Gradient_hgyfl"]
+offsets = PackedFloat32Array(0, 0.12371134, 0.22680412, 0.32474226)
+colors = PackedColorArray(0.99562997, 0.9890209, 0.9938894, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.98662823, 0.9733049, 0.9383476, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_shf1k"]
+gradient = SubResource("Gradient_hgyfl")
+
+[sub_resource type="Curve" id="Curve_bn1b4"]
+_limits = [0.0, 3.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4037609), 0.0, 0.0, 0, 0, Vector2(0.44827583, 0.864491), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s1516"]
+curve = SubResource("Curve_bn1b4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4vaoc"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 10.0
+spread = 96.0
+angular_velocity_min = -1.6093254e-05
+angular_velocity_max = 223.99998
+gravity = Vector3(0, -20, 0)
+scale_over_velocity_min = 140.0
+scale_over_velocity_max = 250.0
+scale_over_velocity_curve = SubResource("CurveTexture_s1516")
+color_ramp = SubResource("GradientTexture1D_shf1k")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hgyfl"]
+radius = 8.0
+
+[sub_resource type="Animation" id="Animation_shf1k"]
+resource_name = "Fly"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -1), Vector2(0, 0), Vector2(0, 1), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bn1b4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_s1516"]
+resource_name = "Spawn"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.13, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1e-05, 1e-05), Vector2(1.25, 1.25), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4vaoc"]
+_data = {
+&"Fly": SubResource("Animation_shf1k"),
+&"RESET": SubResource("Animation_bn1b4"),
+&"Spawn": SubResource("Animation_s1516")
+}
+
+[node name="Area2D" type="Area2D" unique_id=671330636]
+script = ExtResource("1_hgyfl")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=1230584660]
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_4vaoc")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=131241218]
+scale = Vector2(1e-05, 1e-05)
+texture = ExtResource("1_xo6dk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1819169064]
+position = Vector2(-1, 0)
+shape = SubResource("CircleShape2D_hgyfl")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=529846500]
+root_node = NodePath("../CollisionShape2D")
+libraries/ = SubResource("AnimationLibrary_4vaoc")

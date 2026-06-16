@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://d3uxth1vp7iyd"]
+
+[ext_resource type="Script" uid="uid://cpm87v61dmv6a" path="res://Scripts/Bullet.gd" id="1_i54hc"]
+[ext_resource type="PackedScene" uid="uid://b4g1xgiu1nh0n" path="res://Scene/Arrow_explosion.tscn" id="2_i54hc"]
+[ext_resource type="Texture2D" uid="uid://bttj67au8d4yn" path="res://Assets/weapons/bow_p.png" id="3_i54hc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_atepo"]
+radius = 8.0
+
+[node name="Area2D" type="Area2D" unique_id=1687365470]
+script = ExtResource("1_i54hc")
+explosion_scene = ExtResource("2_i54hc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=178289612]
+shape = SubResource("CircleShape2D_atepo")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1353161547]
+texture = ExtResource("3_i54hc")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
